@@ -39,3 +39,10 @@
 
 # debug information files
 *.dwo
+
+# clang format
+*.clang-format
+
+# other folders
+.vscode
+build
