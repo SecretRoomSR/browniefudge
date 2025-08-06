@@ -42,7 +42,12 @@
 
 # clang format
 *.clang-format
+*.clangd
 
 # other folders
 .vscode
 build
+
+# windows shortcuts
+*.lnk
+brudge.bat
