@@ -47,6 +47,7 @@
 # other folders
 .vscode
 build
+out
 
 # windows shortcuts
 *.lnk

@@ -9,10 +9,7 @@ Features:
 3. Functions (sort of like #define in c)     (to do)
 
 ```
-.bf code ===> intermediate code (optimized)
-  						  ||
-						  \/
-executable <========== .c code
+.bf code ===> intermediate code (optimized) ===> .c code ===> executable
 ```
 
 Usage:
