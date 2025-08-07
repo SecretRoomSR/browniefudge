@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cstdlib>
 #include <iterator>
 #include <string>
 #include <algorithm>
@@ -146,9 +147,18 @@ class Preference
 	std::string appName;
 };
 
-void logerror(const std::string &message, char *argv[])
+void loginfo(const std::string &message, char *argv[])
 {
-	std::fprintf(stderr, "%s: %s", argv[0], message.c_str());
+	std::printf("[%s] <INFO> %s\n", argv[0], message.c_str());
+}
+void logwarning(const std::string &message, char *argv[])
+{
+	std::printf("[%s] <WARN> %s\n", argv[0], message.c_str());
+}
+void logerror(int code, const std::string &message, char *argv[])
+{
+	std::fprintf(stderr, "[%s] <ERR> %s\n", argv[0], message.c_str());
+	exit(code);
 }
 
 int main(int argc, char *argv[])
@@ -169,14 +179,12 @@ int main(int argc, char *argv[])
 				std::string compiler = *next;
 				if (!pref.set(compiler))
 				{
-					logerror("Failed to save preference\n", argv);
-					return 2;
+					logerror(1, "Failed to save preference", argv);
 				}
 			}
 			else
 			{
-				logerror("--set-compiler given but no value provided\n", argv);
-				return 3;
+				logerror(1, "--set-compiler given but no value provided", argv);
 			}
 		}
 	}
