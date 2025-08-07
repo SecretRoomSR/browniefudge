@@ -1,9 +1,12 @@
 # browniefudge.
+
 ## This is a practice project for learning C++, do not expect its code to be optimized!
+
+## Description
 
 browniefudge is a brainf compiler that compiles .bf code to .c code.
 
-Features:
+## Features
 1. Compilation of .bf code to .c code
 2. Optimization for repeated increments, decrements, pointer movements, and char outputs     (to do)
 3. Functions (sort of like #define in c)     (to do)
@@ -12,7 +15,7 @@ Features:
 .bf code ===> intermediate code (optimized) ===> .c code ===> executable
 ```
 
-Usage:
+## Usage
 ```
 $ browniefudge --help ==> shows help message
 
@@ -26,3 +29,30 @@ $ browniefudge --set-compiler clang ==> sets default compiler to clang
 
 $ brudge ==> alias
 ```
+
+## Building
+
+Prerequisites:
+1. C and C++ compiler
+2. Make
+
+```
+$ make ==> compile to exe (will have linux support later)
+$ make rebuild ==> cleans before building
+```
+
+## License
+
+This project is licensed under the terms of the GNU General Public License v3.0.
+
+You are free to use, modify, and distribute this software under the same license.
+
+See the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Pull requests and contributions are welcome! If you change any core logic, please document it in the changelog and ensure your code retains GPLv3 compliance.
+
+## Author
+
+Jason Christian (@secretroomsr)
