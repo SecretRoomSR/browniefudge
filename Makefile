@@ -8,7 +8,7 @@ ifeq ($(OS),Windows_NT)
 else
     EXEEXT := 
 endif
-SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/preference.cpp $(SRC_DIR)/interpreter.cpp
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 TARGET = $(BUILD_DIR)/browniefudge$(EXEEXT)
 

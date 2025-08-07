@@ -17,3 +17,54 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+#include <algorithm>
+#include <filesystem>
+#include <fstream>
+#include <string>
+#include <vector>
+
+#include "interpreter.hpp"
+#include "logging.hpp"
+
+namespace fs = std::filesystem;
+
+std::string interpret(fs::path path)
+{
+	char buffer = 0;
+	int bufferLength;
+
+	std::ifstream stream(path);
+	if (!stream.is_open())
+	{
+		logerror(1, "Unable to read file " + path.string());
+	}
+	loginfo("Loaded file " + path.string());
+
+	std::string intermediate;
+	char ch;
+	std::vector<char> knownInstructions = {'+', '-', '<', '>',
+										   '[', ']', ',', '.'};
+
+	while (stream.get(ch))
+	{
+		if (std::find(knownInstructions.begin(), knownInstructions.end(), ch) ==
+			knownInstructions.end())
+			continue;
+		if (buffer == ch)
+		{
+			bufferLength++;
+			continue;
+		}
+		if (buffer != 0)
+		{
+			intermediate += buffer + std::to_string(bufferLength) + ";";
+		}
+		buffer = ch;
+		bufferLength = 1;
+	}
+
+	stream.close();
+
+	return intermediate;
+}

@@ -1,5 +1,5 @@
 /*
- * interpreter.hpp - Header file for interpreter.cpp
+ * logging.cpp - For pretty debugging
  * Copyright (C) 2025 Jason Christian
  *
  * This file is part of browniefudge.
@@ -19,8 +19,21 @@
  */
 
 #include <string>
-#include <filesystem>
 
-namespace fs = std::filesystem;
+#include "logging.hpp"
 
-std::string interpret(fs::path path);
+void loginfo(const std::string &message)
+{
+	std::printf("[browniefudge] <INFO> %s\n", message.c_str());
+}
+
+void logwarning(const std::string &message)
+{
+	std::printf("[browniefudge] <WARN> %s\n", message.c_str());
+}
+
+void logerror(int code, const std::string &message)
+{
+	std::fprintf(stderr, "[browniefudge] <ERR> %s\n", message.c_str());
+	exit(code);
+}
