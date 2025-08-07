@@ -9,7 +9,7 @@ browniefudge is a brainf compiler that compiles .bf code to .c code.
 ## Features
 1. Compilation of .bf code to .c code
 2. Optimization for repeated increments, decrements, pointer movements, and char outputs     (to do)
-3. Functions (sort of like #define in c)     (to do)
+3. Macros (sort of like #define in c)     (to do)
 
 ```
 .bf code ===> intermediate code (optimized) ===> .c code ===> executable
@@ -35,6 +35,7 @@ $ brudge ==> alias
 Prerequisites:
 1. C and C++ compiler
 2. Make
+3. Windows SDK (on windows)
 
 ```
 $ make

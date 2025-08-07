@@ -18,9 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <string>
+#include <vector>
 #include <filesystem>
 
 namespace fs = std::filesystem;
 
-std::string interpret(fs::path path);
+struct intermediate;
+std::vector<intermediate> interpret(fs::path path);

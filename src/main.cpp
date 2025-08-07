@@ -33,7 +33,7 @@ namespace fs = std::filesystem;
 
 int main(int argc, char *argv[])
 {
-	std::string interpreted;
+	std::vector<intermediate> interpreted;
 
 	Preference pref("browniefudge");
 	std::vector<std::string> args;
@@ -130,7 +130,8 @@ int main(int argc, char *argv[])
 			break;
 		}
 
-		loginfo("Intermediate code -> " + interpreted);
+		// convert intermediate to c code
+		
 
 		return 0;
 	}

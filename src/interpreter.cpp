@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
-#include <string>
 #include <vector>
 
 #include "interpreter.hpp"
@@ -29,7 +28,15 @@
 
 namespace fs = std::filesystem;
 
-std::string interpret(fs::path path)
+struct intermediate
+{
+  public:
+	int amount;
+	char inst;
+	intermediate(int amount, char inst) : amount(amount), inst(inst) {}
+};
+
+std::vector<intermediate> interpret(fs::path path)
 {
 	char buffer = 0;
 	int bufferLength;
@@ -41,7 +48,7 @@ std::string interpret(fs::path path)
 	}
 	loginfo("Loaded file " + path.string());
 
-	std::string intermediate;
+	std::vector<intermediate> inter;
 	char ch;
 	std::vector<char> knownInstructions = {'+', '-', '<', '>',
 										   '[', ']', ',', '.'};
@@ -58,13 +65,17 @@ std::string interpret(fs::path path)
 		}
 		if (buffer != 0)
 		{
-			intermediate += buffer + std::to_string(bufferLength) + ";";
+			inter.push_back(intermediate(bufferLength, buffer));
 		}
 		buffer = ch;
 		bufferLength = 1;
 	}
+	if (buffer != 0)
+	{
+		inter.push_back(intermediate(bufferLength, buffer));
+	}
 
 	stream.close();
 
-	return intermediate;
+	return inter;
 }
