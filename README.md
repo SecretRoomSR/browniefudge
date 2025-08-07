@@ -37,7 +37,7 @@ Prerequisites:
 2. Make
 
 ```
-$ make ==> compile to exe (will have linux support later)
+$ make
 $ make rebuild ==> cleans before building
 ```
 
