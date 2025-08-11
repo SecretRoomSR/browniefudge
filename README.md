@@ -19,11 +19,11 @@ browniefudge is a brainf compiler that compiles .bf code to .c code.
 ```
 $ browniefudge --help ==> shows help message
 
-$ browniefudge file.bf ==> compiles file.bf to file.c
+$ browniefudge file.bf ==> compiles file.bf to out.c (default)
 
-$ browniefudge file.bf -o out.c ==> compiles file.bf to out.c
+$ browniefudge file.bf -o name.c ==> compiles file.bf to name.c
 
-$ browniefudge --auto file.bf -o out ==> compiles file.bf to executable
+$ (not implemented yet) browniefudge --auto file.bf -o out ==> compiles file.bf to executable
 
 $ browniefudge --set-compiler clang ==> sets default compiler to clang
 

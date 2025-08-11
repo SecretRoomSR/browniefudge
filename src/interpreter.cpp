@@ -28,18 +28,10 @@
 
 namespace fs = std::filesystem;
 
-struct intermediate
-{
-  public:
-	int amount;
-	char inst;
-	intermediate(int amount, char inst) : amount(amount), inst(inst) {}
-};
-
 std::vector<intermediate> interpret(fs::path path)
 {
 	char buffer = 0;
-	int bufferLength;
+	int buffer_length;
 
 	std::ifstream stream(path);
 	if (!stream.is_open())
@@ -50,29 +42,29 @@ std::vector<intermediate> interpret(fs::path path)
 
 	std::vector<intermediate> inter;
 	char ch;
-	std::vector<char> knownInstructions = {'+', '-', '<', '>',
-										   '[', ']', ',', '.'};
+	std::vector<char> known_instructions = {'+', '-', '<', '>',
+										   '[', ']', ',', '.', '$'};
 
 	while (stream.get(ch))
 	{
-		if (std::find(knownInstructions.begin(), knownInstructions.end(), ch) ==
-			knownInstructions.end())
+		if (std::find(known_instructions.begin(), known_instructions.end(), ch) ==
+			known_instructions.end())
 			continue;
 		if (buffer == ch)
 		{
-			bufferLength++;
+			buffer_length++;
 			continue;
 		}
 		if (buffer != 0)
 		{
-			inter.push_back(intermediate(bufferLength, buffer));
+			inter.push_back(intermediate(buffer_length, buffer));
 		}
 		buffer = ch;
-		bufferLength = 1;
+		buffer_length = 1;
 	}
 	if (buffer != 0)
 	{
-		inter.push_back(intermediate(bufferLength, buffer));
+		inter.push_back(intermediate(buffer_length, buffer));
 	}
 
 	stream.close();

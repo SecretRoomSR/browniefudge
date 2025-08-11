@@ -29,15 +29,15 @@
 #include <fstream>
 #endif
 
-Preference::Preference(const std::string &appName) : appName(appName) {}
+Preference::Preference(const std::string &app_name) : app_name(app_name) {}
 
 // Return true on success, false on failure.
 bool Preference::set(const std::string &value)
 {
 #ifdef _WIN32
 	HKEY hKey;
-	std::string regPath = "Software\\" + appName;
-	if (RegCreateKeyExA(HKEY_CURRENT_USER, regPath.c_str(), 0, NULL,
+	std::string reg_path = "Software\\" + app_name;
+	if (RegCreateKeyExA(HKEY_CURRENT_USER, reg_path.c_str(), 0, NULL,
 						REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey,
 						NULL) == ERROR_SUCCESS)
 	{
@@ -92,29 +92,29 @@ bool Preference::set(const std::string &value)
 }
 
 // Get stored value or defaultValue if not set or on error
-std::string Preference::get(const std::string &defaultValue) const
+std::string Preference::get(const std::string &default_value) const
 {
 #ifdef _WIN32
 	HKEY hKey;
 	char buffer[4096];
-	DWORD bufferSize = sizeof(buffer);
-	std::string regPath = "Software\\" + appName;
-	if (RegOpenKeyExA(HKEY_CURRENT_USER, regPath.c_str(), 0, KEY_READ, &hKey) ==
+	DWORD buffer_size = sizeof(buffer);
+	std::string reg_path = "Software\\" + app_name;
+	if (RegOpenKeyExA(HKEY_CURRENT_USER, reg_path.c_str(), 0, KEY_READ, &hKey) ==
 		ERROR_SUCCESS)
 	{
 		if (RegGetValueA(hKey, NULL, "Value", RRF_RT_REG_SZ, NULL, buffer,
-						 &bufferSize) == ERROR_SUCCESS)
+						 &buffer_size) == ERROR_SUCCESS)
 		{
 			RegCloseKey(hKey);
 			return std::string(buffer);
 		}
 		RegCloseKey(hKey);
 	}
-	return defaultValue;
+	return default_value;
 #else
 	std::ifstream ifs(getConfigPath(), std::ios::binary);
 	if (!ifs.is_open())
-		return defaultValue;
+		return default_value;
 
 	// Read entire file into string
 	std::string contents;
@@ -126,7 +126,7 @@ std::string Preference::get(const std::string &defaultValue) const
 		ifs.seekg(0);
 		ifs.read(&contents[0], size);
 		if (!ifs)
-			return defaultValue;
+			return default_value;
 	}
 	else
 	{
@@ -147,7 +147,7 @@ std::filesystem::path Preference::getConfigPath() const
 	{
 		// No HOME nor XDG_CONFIG_HOME: fallback to current directory's .config
 		// (best-effort)
-		return std::filesystem::path(".") / ".config" / appName / "compiler";
+		return std::filesystem::path(".") / ".config" / app_name / "compiler";
 	}
 
 	std::filesystem::path base;
@@ -159,6 +159,6 @@ std::filesystem::path Preference::getConfigPath() const
 	{
 		base = std::filesystem::path(home) / ".config";
 	}
-	return base / appName / "compiler";
+	return base / app_name / "compiler";
 }
 #endif

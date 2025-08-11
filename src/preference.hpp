@@ -18,12 +18,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #include <string>
 
 class Preference
 {
   public:
-	Preference(const std::string &appName);
+	Preference(const std::string &app_name);
 	bool set(const std::string &value);
 	std::string get(const std::string &defaultValue = "") const;
 
@@ -31,5 +32,5 @@ class Preference
 #ifndef _WIN32
 	std::filesystem::path getConfigPath() const
 #endif
-		std::string appName;
+		std::string app_name;
 };

@@ -1,5 +1,5 @@
 /*
- * interpreter.hpp - Header file for interpreter.cpp
+ * compiler.hpp - Header file for compiler.cpp
  * Copyright (C) 2025 Jason Christian
  *
  * This file is part of browniefudge.
@@ -19,15 +19,8 @@
  */
 
 #pragma once
+#include <string>
 #include <vector>
-#include <filesystem>
+#include "interpreter.hpp"
 
-namespace fs = std::filesystem;
-
-typedef struct intermediate {
-	public:
-	int amount;
-	char inst;
-	intermediate(int amount, char inst) : amount(amount), inst(inst) {}
-} intermediate;
-std::vector<intermediate> interpret(fs::path path);
+std::string compile(std::vector<intermediate> code);

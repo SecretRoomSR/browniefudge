@@ -52,3 +52,7 @@ out
 # windows shortcuts
 *.lnk
 brudge.bat
+
+# dumps and tests
+*.c
+*.bin
