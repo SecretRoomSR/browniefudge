@@ -42,8 +42,8 @@ std::vector<intermediate> interpret(fs::path path)
 
 	std::vector<intermediate> inter;
 	char ch;
-	std::vector<char> known_instructions = {'+', '-', '<', '>',
-										   '[', ']', ',', '.', '$'};
+	std::vector<char> known_instructions = {'+', '-', '<', '>', '$',
+										   '[', ']', ',', '.', ','};
 
 	while (stream.get(ch))
 	{

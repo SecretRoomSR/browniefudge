@@ -20,32 +20,69 @@
 
 #include "interpreter.hpp"
 #include <string>
-#include <string>
 #include <vector>
 
 std::string compile(std::vector<intermediate> code)
 {
+	bool has_input = true;
 	int tape_size = 30000; // standard size
-	std::string headers = "#include<stdio.h>\n#include<stdint.h>\n#include<stdlib.h>\n";
-	std::string result = "int main(){uint8_t *p=calloc(" +
-						 std::to_string(tape_size) +
-						 ", sizeof(uint8_t));int o=0;";
+	std::string headers =
+		"#include<stdio.h>\n"
+		"#include<stdint.h>\n"
+		"#include<stdlib.h>\n"
+		"#ifdef _WIN32\n"
+		"#include <conio.h>\n"
+		"#define g() _getch()\n"
+		"#else\n"
+		"#include <termios.h>\n"
+		"#include <unistd.h>\n"
+		"static inline char g(){char c;struct termios "
+		"t,ot;tcgetattr(STDIN_FILENO,&ot);t=ot;t.c_lflag&=~(ICANON|ECHO);"
+		"tcsetattr(STDIN_FILENO,TCSANOW,&t);read(STDIN_FILENO,&c,1);tcsetattr("
+		"STDIN_FILENO,TCSANOW,&ot);return c;}\n"
+		"#endif\n";
+	std::string result = "int main(){uint8_t*p=calloc(" +
+						 std::to_string(tape_size) + ",1);int o=0;";
+	if (has_input)
+		std::string result = "int main(){uint8_t*p=calloc(" +
+							 std::to_string(tape_size) +
+							 ",1);int o=0;FILE*f=fopen(\"dump.bin\",\"wb\");";
 
 	for (intermediate inst : code)
 	{
 		switch (inst.inst)
 		{
 		case '+':
-			result += "p[o]+=" + std::to_string(inst.amount) + ";";
+			if (inst.amount > 1)
+			{
+				result += "p[o]+=" + std::to_string(inst.amount) + ";";
+				break;
+			}
+			result += "++p[o];";
 			break;
 		case '-':
-			result += "p[o]-=" + std::to_string(inst.amount) + ";";
+			if (inst.amount > 1)
+			{
+				result += "p[o]-=" + std::to_string(inst.amount) + ";";
+				break;
+			}
+			result += "--p[o];";
 			break;
 		case '<':
-			result += "o-=" + std::to_string(inst.amount) + ";";
+			if (inst.amount > 1)
+			{
+				result += "o-=" + std::to_string(inst.amount) + ";";
+				break;
+			}
+			result += "--o;";
 			break;
 		case '>':
-			result += "o+=" + std::to_string(inst.amount) + ";";
+			if (inst.amount > 1)
+			{
+				result += "o+=" + std::to_string(inst.amount) + ";";
+				break;
+			}
+			result += "++o;";
 			break;
 		case '[':
 			result += "while(p[o]!=0){";
@@ -53,12 +90,18 @@ std::string compile(std::vector<intermediate> code)
 		case ']':
 			result += "}";
 			break;
+		case '.':
+			result += "printf(\"%c\",p[o]);";
+			break;
+		case ',':
+			result += "p[o]=g();";
+			break;
 		case '$':
-			result += "FILE*f=fopen(\"dump.bin\",\"wb\");fwrite(p,sizeof(uint8_t)," + std::to_string(tape_size) + ",f);fclose(f);";
+			result += "fwrite(p,1," + std::to_string(tape_size) + ",f);";
 			break;
 		}
 	}
-	result += "return 0;}";
+	result += "fclose(f);return 0;}";
 
 	return headers + result;
 }
