@@ -19,7 +19,6 @@
  */
 
 #include "interpreter.hpp"
-#include <cstring>
 #include <string>
 #include <string>
 #include <vector>
@@ -28,34 +27,34 @@ std::string compile(std::vector<intermediate> code)
 {
 	int tape_size = 30000; // standard size
 	std::string headers = "#include<stdio.h>\n#include<stdint.h>\n#include<stdlib.h>\n";
-	std::string result = "int main(){uint8_t *ptr=calloc(" +
+	std::string result = "int main(){uint8_t *p=calloc(" +
 						 std::to_string(tape_size) +
-						 ", sizeof(uint8_t));int offset;";
+						 ", sizeof(uint8_t));int o=0;";
 
 	for (intermediate inst : code)
 	{
 		switch (inst.inst)
 		{
 		case '+':
-			result += "*(ptr+offset)+=" + std::to_string(inst.amount) + ";";
+			result += "p[o]+=" + std::to_string(inst.amount) + ";";
 			break;
 		case '-':
-			result += "*(ptr+offset)-=" + std::to_string(inst.amount) + ";";
+			result += "p[o]-=" + std::to_string(inst.amount) + ";";
 			break;
 		case '<':
-			result += "offset-=" + std::to_string(inst.amount) + ";";
+			result += "o-=" + std::to_string(inst.amount) + ";";
 			break;
 		case '>':
-			result += "offset+=" + std::to_string(inst.amount) + ";";
+			result += "o+=" + std::to_string(inst.amount) + ";";
 			break;
 		case '[':
-			result += "while(*(ptr+offset)!=0){";
+			result += "while(p[o]!=0){";
 			break;
 		case ']':
 			result += "}";
 			break;
 		case '$':
-			result += "FILE *f=fopen(\"dump.bin\",\"wb\");fwrite(ptr,sizeof(uint8_t)," + std::to_string(tape_size) + ",f);fclose(f);";
+			result += "FILE*f=fopen(\"dump.bin\",\"wb\");fwrite(p,sizeof(uint8_t)," + std::to_string(tape_size) + ",f);fclose(f);";
 			break;
 		}
 	}
