@@ -26,13 +26,19 @@ std::string compile(std::vector<intermediate> code)
 {
 	bool has_input = false;
 	bool has_dump = false;
+	bool has_io = false;
 	int tape_size = 30000; // standard size
 	for (intermediate inst : code)
 	{
 		if (inst.inst == ',')
 		{
 			has_input = true;
+			has_io = true;
 			break;
+		}
+		if (inst.inst == '.')
+		{
+			has_io = true;
 		}
 	}
 	for (intermediate inst : code)
@@ -43,9 +49,9 @@ std::string compile(std::vector<intermediate> code)
 			break;
 		}
 	}
-	std::string headers = "#include<stdio.h>\n"
-						  "#include<stdint.h>\n"
+	std::string headers = "#include<stdint.h>\n"
 						  "#include<stdlib.h>\n";
+	if (has_io) headers += "#include<stdio.h>\n";
 	if (has_input)
 	{
 		headers +=
