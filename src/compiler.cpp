@@ -51,7 +51,8 @@ std::string compile(std::vector<intermediate> code)
 	}
 	std::string headers = "#include<stdint.h>\n"
 						  "#include<stdlib.h>\n";
-	if (has_io) headers += "#include<stdio.h>\n";
+	if (has_io)
+		headers += "#include<stdio.h>\n";
 	if (has_input)
 	{
 		headers +=
@@ -110,15 +111,27 @@ std::string compile(std::vector<intermediate> code)
 			result += "++o;";
 			break;
 		case '[':
-			result += "while(p[o]!=0){";
+			for (int i = 0; i < inst.amount; ++i) result += "while(p[o]!=0){";
 			break;
 		case ']':
-			result += "}";
+			result += std::string(inst.amount, '}');
 			break;
 		case '.':
+			if (inst.amount > 1)
+			{
+				result += "for(int i=0;i<" + std::to_string(inst.amount) +
+						  ";++i){printf(\"%c\",p[o]);}";
+				break;
+			}
 			result += "printf(\"%c\",p[o]);";
 			break;
 		case ',':
+			if (inst.amount > 1)
+			{
+				result += "for(int i=0;i<" + std::to_string(inst.amount) +
+						  ";++i){p[o]=g();}";
+				break;
+			}
 			result += "p[o]=g();";
 			break;
 		case '$':

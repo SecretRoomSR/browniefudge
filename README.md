@@ -1,10 +1,10 @@
 # browniefudge.
 
-## This is a practice project for learning C++, do not expect its code to be optimized!
+## This is a practice project for learning C++, do not expect it to be optimized!
 
 ## Description
 
-browniefudge is a brainf compiler that compiles .bf code to .c code.
+browniefudge is a brainf*ck compiler that compiles .bf code to .c code.
 
 ## Features
 1. Compilation of .bf code to .c code
