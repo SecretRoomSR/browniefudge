@@ -51,7 +51,7 @@ std::string compile(std::vector<intermediate> code)
 	}
 	std::string headers = "#include<stdint.h>\n"
 						  "#include<stdlib.h>\n";
-	if (has_io)
+	if (has_io || has_dump)
 		headers += "#include<stdio.h>\n";
 	if (has_input)
 	{

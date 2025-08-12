@@ -204,11 +204,11 @@ int main(int argc, char *argv[])
 			{
 				if (fs::remove(coutput))
 				{
-					loginfo("File deleted successfully.\n");
+					loginfo("File deleted successfully.");
 				}
 				else
 				{
-					loginfo("File does not exist.\n");
+					loginfo("File does not exist.");
 				}
 			}
 			catch (const fs::filesystem_error &e)
