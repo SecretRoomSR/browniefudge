@@ -8,7 +8,7 @@ browniefudge is a brainf compiler that compiles .bf code to .c code.
 
 ## Features
 1. Compilation of .bf code to .c code
-2. Optimization for repeated increments, decrements, pointer movements, and char outputs     (to do)
+2. Optimization for repeated increments, decrements, pointer movements, and char outputs
 3. Macros (sort of like #define in c)     (to do)
 
 ```
