@@ -23,7 +23,7 @@ $ browniefudge file.bf ==> compiles file.bf to out.c (default)
 
 $ browniefudge file.bf -o name.c ==> compiles file.bf to name.c
 
-$ (not implemented yet) browniefudge --auto file.bf -o out ==> compiles file.bf to executable
+$ browniefudge --auto file.bf -o out (only works with gcc styled compilers!) ==> compiles file.bf to executable
 
 $ browniefudge --set-compiler clang ==> sets default compiler to clang
 

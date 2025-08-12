@@ -20,16 +20,17 @@
 
 #include <algorithm>
 #include <cstdio>
+#include <cstdlib>
 #include <filesystem>
-#include <iterator>
-#include <vector>
 #include <fstream>
+#include <iterator>
+#include <string>
+#include <vector>
 
 #include "compiler.hpp"
 #include "interpreter.hpp"
 #include "logging.hpp"
 #include "preference.hpp"
-
 
 namespace fs = std::filesystem;
 
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
 {
 	std::vector<intermediate> interpreted;
 	std::string output = "out.c";
+	fs::path src_path;
 
 	Preference pref("browniefudge");
 	std::vector<std::string> args;
@@ -74,7 +76,8 @@ int main(int argc, char *argv[])
 
 		// unknown options
 		std::vector<std::string> known_options = {
-			"--auto", "--set-compiler", "-v", "--version", "-h", "--help", "-o"};
+			"--auto", "--set-compiler", "-v", "--version",
+			"-h",	  "--help",			"-o"};
 		for (std::string arg : args)
 		{
 			if (arg[0] == '-' &&
@@ -102,7 +105,11 @@ int main(int argc, char *argv[])
 			return 0;
 		}
 
-		// set compiler
+		// --auto
+		bool is_auto =
+			std::find(args.begin(), args.end(), "--auto") != args.end();
+
+		// --set-compiler
 		auto pos = std::find(args.begin(), args.end(), "--set-compiler");
 		if (pos != args.end())
 		{
@@ -119,9 +126,10 @@ int main(int argc, char *argv[])
 			{
 				logerror(1, "--set-compiler given but no value provided");
 			}
+			return 0;
 		}
 
-		// set compiler
+		// -o
 		pos = std::find(args.begin(), args.end(), "-o");
 		if (pos != args.end())
 		{
@@ -135,6 +143,14 @@ int main(int argc, char *argv[])
 				logerror(1, "-o given but no value provided");
 			}
 		}
+		else
+		{
+#if _WIN32
+			output = "a.exe";
+#else
+			output = "a"
+#endif
+		}
 
 		// get source code path
 		for (int i = 1; i < args.size(); ++i)
@@ -146,18 +162,61 @@ int main(int argc, char *argv[])
 			if (arg[0] == '-' || prev[0] == '-')
 				continue;
 
-			fs::path src_path = fs::absolute(arg);
+			src_path = fs::absolute(arg);
 			interpreted = interpret(src_path);
 			break;
 		}
 
 		// convert intermediate to c code
+		std::string coutput(output);
+		if (is_auto)
+		{
+			coutput = "out.c";
+		}
+
 		std::string converted = compile(interpreted);
-		std::ofstream ofs(output);
+		std::ofstream ofs(coutput);
 		ofs << converted;
 		ofs.close();
 
-		loginfo("Compiled to " + output);
+		loginfo("Compiled to " + coutput);
+
+		// --auto
+		if (is_auto)
+		{
+			loginfo("--auto given, compiling " + coutput + " to " + output +
+					"...");
+			std::string compiler = pref.get("gcc");
+			int result =
+				system((compiler + " -o " + output + " " + coutput).c_str());
+			if (result != 0)
+			{
+				logerror(
+					1, compiler + " returned with error code " +
+						   std::to_string(result) +
+						   "! This is most likely an error with browniefudge, "
+						   "if manually compiling the C code works, then it's "
+						   "most likely a problem with your C compiler.");
+			}
+
+			loginfo("Deleting " + coutput + "...");
+			try
+			{
+				if (fs::remove(coutput))
+				{
+					loginfo("File deleted successfully.\n");
+				}
+				else
+				{
+					loginfo("File does not exist.\n");
+				}
+			}
+			catch (const fs::filesystem_error &e)
+			{
+				logwarning("Error deleting file: " + std::string(e.what()));
+			}
+		}
+		loginfo(src_path.generic_string() + " compiled successfully!");
 
 		return 0;
 	}
