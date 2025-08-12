@@ -24,29 +24,48 @@
 
 std::string compile(std::vector<intermediate> code)
 {
-	bool has_input = true;
+	bool has_input = false;
+	bool has_dump = false;
 	int tape_size = 30000; // standard size
-	std::string headers =
-		"#include<stdio.h>\n"
-		"#include<stdint.h>\n"
-		"#include<stdlib.h>\n"
-		"#ifdef _WIN32\n"
-		"#include <conio.h>\n"
-		"#define g() _getch()\n"
-		"#else\n"
-		"#include <termios.h>\n"
-		"#include <unistd.h>\n"
-		"static inline char g(){char c;struct termios "
-		"t,ot;tcgetattr(STDIN_FILENO,&ot);t=ot;t.c_lflag&=~(ICANON|ECHO);"
-		"tcsetattr(STDIN_FILENO,TCSANOW,&t);read(STDIN_FILENO,&c,1);tcsetattr("
-		"STDIN_FILENO,TCSANOW,&ot);return c;}\n"
-		"#endif\n";
+	for (intermediate inst : code)
+	{
+		if (inst.inst == ',')
+		{
+			has_input = true;
+			break;
+		}
+	}
+	for (intermediate inst : code)
+	{
+		if (inst.inst == '$')
+		{
+			has_dump = true;
+			break;
+		}
+	}
+	std::string headers = "#include<stdio.h>\n"
+						  "#include<stdint.h>\n"
+						  "#include<stdlib.h>\n";
+	if (has_input)
+	{
+		headers +=
+			"#ifdef _WIN32\n"
+			"#include <conio.h>\n"
+			"#define g() _getch()\n"
+			"#else\n"
+			"#include <termios.h>\n"
+			"#include <unistd.h>\n"
+			"static inline char g(){char c;struct termios "
+			"t,ot;tcgetattr(STDIN_FILENO,&ot);t=ot;t.c_lflag&=~(ICANON|ECHO);"
+			"tcsetattr(STDIN_FILENO,TCSANOW,&t);read(STDIN_FILENO,&c,1);"
+			"tcsetattr("
+			"STDIN_FILENO,TCSANOW,&ot);return c;}\n"
+			"#endif\n";
+	}
 	std::string result = "int main(){uint8_t*p=calloc(" +
 						 std::to_string(tape_size) + ",1);int o=0;";
-	if (has_input)
-		std::string result = "int main(){uint8_t*p=calloc(" +
-							 std::to_string(tape_size) +
-							 ",1);int o=0;FILE*f=fopen(\"dump.bin\",\"wb\");";
+	if (has_dump)
+		result += "FILE*f=fopen(\"dump.bin\",\"wb\");";
 
 	for (intermediate inst : code)
 	{
@@ -101,7 +120,11 @@ std::string compile(std::vector<intermediate> code)
 			break;
 		}
 	}
-	result += "fclose(f);return 0;}";
+	if (has_dump)
+	{
+		result += "fclose(f);";
+	}
+	result += "return 0;}";
 
 	return headers + result;
 }
