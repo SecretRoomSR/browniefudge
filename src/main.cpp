@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 #if _WIN32
 			output = "a.exe";
 #else
-			output = "a"
+			output = "a";
 #endif
 		}
 

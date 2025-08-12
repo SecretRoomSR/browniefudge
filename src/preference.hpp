@@ -30,7 +30,7 @@ class Preference
 
   private:
 #ifndef _WIN32
-	std::filesystem::path getConfigPath() const
+	std::filesystem::path getConfigPath() const;
 #endif
 		std::string app_name;
 };
