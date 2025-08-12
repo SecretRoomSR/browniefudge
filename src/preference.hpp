@@ -20,6 +20,9 @@
 
 #pragma once
 #include <string>
+#ifndef _WIN32
+#include <filesystem>
+#endif
 
 class Preference
 {
