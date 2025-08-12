@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 				logerror(1, "-o given but no value provided");
 			}
 		}
-		else
+		else if (is_auto)
 		{
 #if _WIN32
 			output = "a.exe";
