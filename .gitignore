@@ -56,3 +56,7 @@ brudge.bat
 # dumps and tests
 *.c
 *.bin
+
+# linux exes
+a
+brudge
