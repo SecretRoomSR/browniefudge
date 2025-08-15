@@ -19,14 +19,16 @@
  */
 
 #pragma once
-#include <vector>
 #include <filesystem>
+#include <vector>
+
 
 namespace fs = std::filesystem;
 
-typedef struct intermediate {
-	public:
-	int amount;
+typedef struct intermediate
+{
+public:
+	int	 amount;
 	char inst;
 	intermediate(int amount, char inst) : amount(amount), inst(inst) {}
 } intermediate;

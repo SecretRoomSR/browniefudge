@@ -26,14 +26,14 @@
 
 class Preference
 {
-  public:
+public:
 	Preference(const std::string &app_name);
-	bool set(const std::string &value);
+	bool		set(const std::string &value);
 	std::string get(const std::string &defaultValue = "") const;
 
-  private:
+private:
 #ifndef _WIN32
 	std::filesystem::path getConfigPath() const;
 #endif
-		std::string app_name;
+	std::string app_name;
 };

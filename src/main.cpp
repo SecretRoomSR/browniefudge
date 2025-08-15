@@ -37,10 +37,10 @@ namespace fs = std::filesystem;
 int main(int argc, char *argv[])
 {
 	std::vector<intermediate> interpreted;
-	std::string output = "out.c";
-	fs::path src_path;
+	std::string				  output = "out.c";
+	fs::path				  src_path;
 
-	Preference pref("browniefudge");
+	Preference				 pref("browniefudge");
 	std::vector<std::string> args;
 	args.reserve(argc);
 	for (int i = 0; i < argc; ++i)
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 		// unknown options
 		std::vector<std::string> known_options = {
 			"--auto", "--set-compiler", "-v", "--version",
-			"-h",	  "--help",			"-o"};
+			"-h", "--help", "-o"};
 		for (std::string arg : args)
 		{
 			if (arg[0] == '-' &&
@@ -155,14 +155,14 @@ int main(int argc, char *argv[])
 		// get source code path
 		for (int i = 1; i < args.size(); ++i)
 		{
-			std::string arg = args[i];
+			std::string arg	 = args[i];
 			std::string prev = args[i - 1];
 
 			// skip if arg has dash or previous does not have a dash
 			if (arg[0] == '-' || prev[0] == '-')
 				continue;
 
-			src_path = fs::absolute(arg);
+			src_path	= fs::absolute(arg);
 			interpreted = interpret(src_path);
 			break;
 		}
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 			coutput = "out.c";
 		}
 
-		std::string converted = compile(interpreted);
+		std::string	  converted = compile(interpreted);
 		std::ofstream ofs(coutput);
 		ofs << converted;
 		ofs.close();
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 			loginfo("--auto given, compiling " + coutput + " to " + output +
 					"...");
 			std::string compiler = pref.get("gcc");
-			int result =
+			int			result =
 				system((compiler + " -o " + output + " " + coutput).c_str());
 			if (result != 0)
 			{

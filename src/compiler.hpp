@@ -19,8 +19,9 @@
  */
 
 #pragma once
+#include "interpreter.hpp"
 #include <string>
 #include <vector>
-#include "interpreter.hpp"
+
 
 std::string compile(std::vector<intermediate> code);
