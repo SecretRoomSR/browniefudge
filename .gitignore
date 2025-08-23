@@ -41,7 +41,6 @@
 *.dwo
 
 # clang format
-*.clang-format
 *.clangd
 
 # other folders

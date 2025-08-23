@@ -1,0 +1,27 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always
+PointerAlignment: Right
+BreakBeforeBraces: Allman
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: false   # functions keep brace on same line
+  AfterNamespace: true
+  AfterStruct: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+AllowShortFunctionsOnASingleLine: Empty
+ColumnLimit: 0
+NamespaceIndentation: All
+AccessModifierOffset: -4
+SpacesInParentheses: false
+SpaceAfterCStyleCast: true
+SpaceBeforeParens: ControlStatements
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+SortIncludes: CaseSensitive
+IncludeBlocks: Preserve
