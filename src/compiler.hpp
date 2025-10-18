@@ -23,5 +23,4 @@
 #include <string>
 #include <vector>
 
-
 std::string compile(std::vector<intermediate> code);

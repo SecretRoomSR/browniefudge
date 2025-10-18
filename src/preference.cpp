@@ -35,7 +35,7 @@ Preference::Preference(const std::string &app_name) : app_name(app_name) {}
 bool Preference::set(const std::string &value)
 {
 #ifdef _WIN32
-	HKEY		hKey;
+	HKEY hKey;
 	std::string reg_path = "Software\\" + app_name;
 	if (RegCreateKeyExA(HKEY_CURRENT_USER, reg_path.c_str(), 0, NULL,
 						REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey,
@@ -95,10 +95,10 @@ bool Preference::set(const std::string &value)
 std::string Preference::get(const std::string &default_value) const
 {
 #ifdef _WIN32
-	HKEY		hKey;
-	char		buffer[4096];
-	DWORD		buffer_size = sizeof(buffer);
-	std::string reg_path	= "Software\\" + app_name;
+	HKEY hKey;
+	char buffer[4096];
+	DWORD buffer_size = sizeof(buffer);
+	std::string reg_path = "Software\\" + app_name;
 	if (RegOpenKeyExA(HKEY_CURRENT_USER, reg_path.c_str(), 0, KEY_READ, &hKey) ==
 		ERROR_SUCCESS)
 	{
@@ -141,7 +141,7 @@ std::string Preference::get(const std::string &default_value) const
 #ifndef _WIN32
 std::filesystem::path Preference::getConfigPath() const
 {
-	const char *xdg	 = std::getenv("XDG_CONFIG_HOME");
+	const char *xdg = std::getenv("XDG_CONFIG_HOME");
 	const char *home = std::getenv("HOME");
 	if (!home && !xdg)
 	{

@@ -21,7 +21,5 @@ AccessModifierOffset: -4
 SpacesInParentheses: false
 SpaceAfterCStyleCast: true
 SpaceBeforeParens: ControlStatements
-AlignConsecutiveAssignments: true
-AlignConsecutiveDeclarations: true
 SortIncludes: CaseSensitive
 IncludeBlocks: Preserve

@@ -28,7 +28,7 @@ class Preference
 {
 public:
 	Preference(const std::string &app_name);
-	bool		set(const std::string &value);
+	bool set(const std::string &value);
 	std::string get(const std::string &defaultValue = "") const;
 
 private:
