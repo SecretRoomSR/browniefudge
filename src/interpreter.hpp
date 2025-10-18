@@ -22,7 +22,6 @@
 #include <filesystem>
 #include <vector>
 
-
 namespace fs = std::filesystem;
 
 typedef struct intermediate
