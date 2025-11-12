@@ -22,29 +22,23 @@
 #include <string>
 #include <vector>
 
-std::string compile(std::vector<intermediate> code)
-{
+std::string compile(std::vector<intermediate> code) {
 	bool has_input = false;
 	bool has_dump = false;
 	bool has_io = false;
 	int tape_size = 30000; // standard size
-	for (intermediate inst : code)
-	{
-		if (inst.inst == ',')
-		{
+	for (intermediate inst : code) {
+		if (inst.inst == ',') {
 			has_input = true;
 			has_io = true;
 			break;
 		}
-		if (inst.inst == '.')
-		{
+		if (inst.inst == '.') {
 			has_io = true;
 		}
 	}
-	for (intermediate inst : code)
-	{
-		if (inst.inst == '$')
-		{
+	for (intermediate inst : code) {
+		if (inst.inst == '$') {
 			has_dump = true;
 			break;
 		}
@@ -53,8 +47,7 @@ std::string compile(std::vector<intermediate> code)
 						  "#include<stdlib.h>\n";
 	if (has_io || has_dump)
 		headers += "#include<stdio.h>\n";
-	if (has_input)
-	{
+	if (has_input) {
 		headers +=
 			"#ifdef _WIN32\n"
 			"#include <conio.h>\n"
@@ -74,37 +67,31 @@ std::string compile(std::vector<intermediate> code)
 	if (has_dump)
 		result += "FILE*f=fopen(\"dump.bin\",\"wb\");";
 
-	for (intermediate inst : code)
-	{
-		switch (inst.inst)
-		{
+	for (intermediate inst : code) {
+		switch (inst.inst) {
 		case '+':
-			if (inst.amount > 1)
-			{
+			if (inst.amount > 1) {
 				result += "p[o]+=" + std::to_string(inst.amount) + ";";
 				break;
 			}
 			result += "++p[o];";
 			break;
 		case '-':
-			if (inst.amount > 1)
-			{
+			if (inst.amount > 1) {
 				result += "p[o]-=" + std::to_string(inst.amount) + ";";
 				break;
 			}
 			result += "--p[o];";
 			break;
 		case '<':
-			if (inst.amount > 1)
-			{
+			if (inst.amount > 1) {
 				result += "o-=" + std::to_string(inst.amount) + ";";
 				break;
 			}
 			result += "--o;";
 			break;
 		case '>':
-			if (inst.amount > 1)
-			{
+			if (inst.amount > 1) {
 				result += "o+=" + std::to_string(inst.amount) + ";";
 				break;
 			}
@@ -118,8 +105,7 @@ std::string compile(std::vector<intermediate> code)
 			result += std::string(inst.amount, '}');
 			break;
 		case '.':
-			if (inst.amount > 1)
-			{
+			if (inst.amount > 1) {
 				result += "for(int i=0;i<" + std::to_string(inst.amount) +
 						  ";++i){printf(\"%c\",p[o]);}";
 				break;
@@ -127,8 +113,7 @@ std::string compile(std::vector<intermediate> code)
 			result += "printf(\"%c\",p[o]);";
 			break;
 		case ',':
-			if (inst.amount > 1)
-			{
+			if (inst.amount > 1) {
 				result += "for(int i=0;i<" + std::to_string(inst.amount) +
 						  ";++i){p[o]=g();}";
 				break;
@@ -140,8 +125,7 @@ std::string compile(std::vector<intermediate> code)
 			break;
 		}
 	}
-	if (has_dump)
-	{
+	if (has_dump) {
 		result += "fclose(f);";
 	}
 	result += "return 0;}";

@@ -24,8 +24,7 @@
 #include <filesystem>
 #endif
 
-class Preference
-{
+class Preference {
 public:
 	Preference(const std::string &app_name);
 	bool set(const std::string &value);

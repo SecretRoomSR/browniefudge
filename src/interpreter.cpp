@@ -28,14 +28,12 @@
 
 namespace fs = std::filesystem;
 
-std::vector<intermediate> interpret(fs::path path)
-{
+std::vector<intermediate> interpret(fs::path path) {
 	char buffer = 0;
 	int buffer_length;
 
 	std::ifstream stream(path);
-	if (!stream.is_open())
-	{
+	if (!stream.is_open()) {
 		logerror(1, "Unable to read file " + path.string());
 	}
 	loginfo("Loaded file " + path.string());
@@ -45,25 +43,21 @@ std::vector<intermediate> interpret(fs::path path)
 	std::vector<char> known_instructions = {'+', '-', '<', '>', '$',
 											'[', ']', ',', '.', ','};
 
-	while (stream.get(ch))
-	{
+	while (stream.get(ch)) {
 		if (std::find(known_instructions.begin(), known_instructions.end(), ch) ==
 			known_instructions.end())
 			continue;
-		if (buffer == ch)
-		{
+		if (buffer == ch) {
 			buffer_length++;
 			continue;
 		}
-		if (buffer != 0)
-		{
+		if (buffer != 0) {
 			inter.push_back(intermediate(buffer_length, buffer));
 		}
 		buffer = ch;
 		buffer_length = 1;
 	}
-	if (buffer != 0)
-	{
+	if (buffer != 0) {
 		inter.push_back(intermediate(buffer_length, buffer));
 	}
 

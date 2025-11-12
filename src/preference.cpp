@@ -32,15 +32,13 @@
 Preference::Preference(const std::string &app_name) : app_name(app_name) {}
 
 // Return true on success, false on failure.
-bool Preference::set(const std::string &value)
-{
+bool Preference::set(const std::string &value) {
 #ifdef _WIN32
 	HKEY hKey;
 	std::string reg_path = "Software\\" + app_name;
 	if (RegCreateKeyExA(HKEY_CURRENT_USER, reg_path.c_str(), 0, NULL,
 						REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey,
-						NULL) == ERROR_SUCCESS)
-	{
+						NULL) == ERROR_SUCCESS) {
 		LONG rc = RegSetValueExA(hKey, "Value", 0, REG_SZ,
 								 reinterpret_cast<const BYTE *>(value.c_str()),
 								 static_cast<DWORD>(value.size() + 1));
@@ -53,8 +51,7 @@ bool Preference::set(const std::string &value)
 
 	std::error_code ec;
 	std::filesystem::create_directories(path.parent_path(), ec);
-	if (ec)
-	{
+	if (ec) {
 		// Could not create directories
 		return false;
 	}
@@ -92,19 +89,16 @@ bool Preference::set(const std::string &value)
 }
 
 // Get stored value or defaultValue if not set or on error
-std::string Preference::get(const std::string &default_value) const
-{
+std::string Preference::get(const std::string &default_value) const {
 #ifdef _WIN32
 	HKEY hKey;
 	char buffer[4096];
 	DWORD buffer_size = sizeof(buffer);
 	std::string reg_path = "Software\\" + app_name;
 	if (RegOpenKeyExA(HKEY_CURRENT_USER, reg_path.c_str(), 0, KEY_READ, &hKey) ==
-		ERROR_SUCCESS)
-	{
+		ERROR_SUCCESS) {
 		if (RegGetValueA(hKey, NULL, "Value", RRF_RT_REG_SZ, NULL, buffer,
-						 &buffer_size) == ERROR_SUCCESS)
-		{
+						 &buffer_size) == ERROR_SUCCESS) {
 			RegCloseKey(hKey);
 			return std::string(buffer);
 		}
@@ -120,16 +114,13 @@ std::string Preference::get(const std::string &default_value) const
 	std::string contents;
 	ifs.seekg(0, std::ios::end);
 	auto size = ifs.tellg();
-	if (size > 0)
-	{
+	if (size > 0) {
 		contents.resize(static_cast<size_t>(size));
 		ifs.seekg(0);
 		ifs.read(&contents[0], size);
 		if (!ifs)
 			return default_value;
-	}
-	else
-	{
+	} else {
 		// Empty file or size==0: return empty string (or default?)
 		// We'll return empty string to match prior behavior of getline
 		// returning "".
@@ -139,24 +130,19 @@ std::string Preference::get(const std::string &default_value) const
 }
 
 #ifndef _WIN32
-std::filesystem::path Preference::getConfigPath() const
-{
+std::filesystem::path Preference::getConfigPath() const {
 	const char *xdg = std::getenv("XDG_CONFIG_HOME");
 	const char *home = std::getenv("HOME");
-	if (!home && !xdg)
-	{
+	if (!home && !xdg) {
 		// No HOME nor XDG_CONFIG_HOME: fallback to current directory's .config
 		// (best-effort)
 		return std::filesystem::path(".") / ".config" / app_name / "compiler";
 	}
 
 	std::filesystem::path base;
-	if (xdg && *xdg)
-	{
+	if (xdg && *xdg) {
 		base = xdg;
-	}
-	else
-	{
+	} else {
 		base = std::filesystem::path(home) / ".config";
 	}
 	return base / app_name / "compiler";

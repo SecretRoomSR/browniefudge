@@ -24,8 +24,7 @@
 
 namespace fs = std::filesystem;
 
-typedef struct intermediate
-{
+typedef struct intermediate {
 public:
 	int amount;
 	char inst;

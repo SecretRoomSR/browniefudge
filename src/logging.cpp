@@ -22,18 +22,15 @@
 
 #include "logging.hpp"
 
-void loginfo(const std::string &message)
-{
+void loginfo(const std::string &message) {
 	std::printf("[browniefudge] <INFO> %s\n", message.c_str());
 }
 
-void logwarning(const std::string &message)
-{
+void logwarning(const std::string &message) {
 	std::printf("[browniefudge] <WARN> %s\n", message.c_str());
 }
 
-void logerror(int code, const std::string &message)
-{
+void logerror(int code, const std::string &message) {
 	std::fprintf(stderr, "[browniefudge] <ERR> %s\n", message.c_str());
 	exit(code);
 }

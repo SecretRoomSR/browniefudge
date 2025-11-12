@@ -34,8 +34,7 @@
 
 namespace fs = std::filesystem;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	std::vector<intermediate> interpreted;
 	std::string output = "out.c";
 	fs::path src_path;
@@ -46,8 +45,7 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < argc; ++i)
 		args.emplace_back(argv[i] ? argv[i] : "");
 
-	if (argc > 1)
-	{
+	if (argc > 1) {
 		std::string text =
 			"browniefudge 1.0.0\n"
 			"Copyright (C) 2025 Jason Christian\n"
@@ -78,12 +76,10 @@ int main(int argc, char *argv[])
 		std::vector<std::string> known_options = {
 			"--auto", "--set-compiler", "-v", "--version",
 			"-h", "--help", "-o"};
-		for (std::string arg : args)
-		{
+		for (std::string arg : args) {
 			if (arg[0] == '-' &&
 				std::find(known_options.begin(), known_options.end(), arg) ==
-					known_options.end())
-			{
+					known_options.end()) {
 				std::printf(
 					"Unknown option %s\nFor help, type 'browniefudge --help'\n",
 					arg.c_str());
@@ -93,14 +89,12 @@ int main(int argc, char *argv[])
 
 		// --version and --help
 		if (std::find(args.begin(), args.end(), "-v") != args.end() ||
-			std::find(args.begin(), args.end(), "--version") != args.end())
-		{
+			std::find(args.begin(), args.end(), "--version") != args.end()) {
 			std::printf("%s", text.c_str());
 			return 0;
 		}
 		if (std::find(args.begin(), args.end(), "-h") != args.end() ||
-			std::find(args.begin(), args.end(), "--help") != args.end())
-		{
+			std::find(args.begin(), args.end(), "--help") != args.end()) {
 			std::printf("%s\n%s", text.c_str(), help_text.c_str());
 			return 0;
 		}
@@ -111,19 +105,14 @@ int main(int argc, char *argv[])
 
 		// --set-compiler
 		auto pos = std::find(args.begin(), args.end(), "--set-compiler");
-		if (pos != args.end())
-		{
+		if (pos != args.end()) {
 			auto next = std::next(pos);
-			if (next != args.end())
-			{
+			if (next != args.end()) {
 				std::string compiler = *next;
-				if (!pref.set(compiler))
-				{
+				if (!pref.set(compiler)) {
 					logerror(1, "Failed to save preference");
 				}
-			}
-			else
-			{
+			} else {
 				logerror(1, "--set-compiler given but no value provided");
 			}
 			return 0;
@@ -131,20 +120,14 @@ int main(int argc, char *argv[])
 
 		// -o
 		pos = std::find(args.begin(), args.end(), "-o");
-		if (pos != args.end())
-		{
+		if (pos != args.end()) {
 			auto next = std::next(pos);
-			if (next != args.end())
-			{
+			if (next != args.end()) {
 				output = *next;
-			}
-			else
-			{
+			} else {
 				logerror(1, "-o given but no value provided");
 			}
-		}
-		else if (is_auto)
-		{
+		} else if (is_auto) {
 #if _WIN32
 			output = "a.exe";
 #else
@@ -153,8 +136,7 @@ int main(int argc, char *argv[])
 		}
 
 		// get source code path
-		for (int i = 1; i < args.size(); ++i)
-		{
+		for (int i = 1; i < args.size(); ++i) {
 			std::string arg = args[i];
 			std::string prev = args[i - 1];
 
@@ -169,8 +151,7 @@ int main(int argc, char *argv[])
 
 		// convert intermediate to c code
 		std::string coutput(output);
-		if (is_auto)
-		{
+		if (is_auto) {
 			coutput = "out.c";
 		}
 
@@ -182,15 +163,13 @@ int main(int argc, char *argv[])
 		loginfo("Compiled to " + coutput);
 
 		// --auto
-		if (is_auto)
-		{
+		if (is_auto) {
 			loginfo("--auto given, compiling " + coutput + " to " + output +
 					"...");
 			std::string compiler = pref.get("gcc");
 			int result =
 				system((compiler + " -o " + output + " " + coutput).c_str());
-			if (result != 0)
-			{
+			if (result != 0) {
 				logerror(
 					1, compiler + " returned with error code " +
 						   std::to_string(result) +
@@ -200,19 +179,13 @@ int main(int argc, char *argv[])
 			}
 
 			loginfo("Deleting " + coutput + "...");
-			try
-			{
-				if (fs::remove(coutput))
-				{
+			try {
+				if (fs::remove(coutput)) {
 					loginfo("File deleted successfully.");
-				}
-				else
-				{
+				} else {
 					loginfo("File does not exist.");
 				}
-			}
-			catch (const fs::filesystem_error &e)
-			{
+			} catch (const fs::filesystem_error &e) {
 				logwarning("Error deleting file: " + std::string(e.what()));
 			}
 		}
